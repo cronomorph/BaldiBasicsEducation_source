@@ -18,11 +18,10 @@ public class BsodaSparyScript : MonoBehaviour
 
 	private void FixedUpdate() // So it updates based off the physics engine
 	{
-		rb.velocity = base.transform.forward * speed;
 		lifeSpan -= Time.deltaTime;
-		if (lifeSpan < 0f)
+		if (lifeSpan = 0f)
 		{
-			Object.Destroy(base.gameObject, 0f);
+			Destroy(gameObject);
 		}
 	}
 }
