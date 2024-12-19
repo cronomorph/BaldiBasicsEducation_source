@@ -1,4 +1,3 @@
-// Billboard
 using UnityEngine;
 
 public class Billboard : MonoBehaviour
@@ -10,8 +9,8 @@ public class Billboard : MonoBehaviour
 		m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 	}
 
-	private void LateUpdate()
+	private void Update()
 	{
-		base.transform.LookAt(base.transform.position + m_Camera.transform.rotation * Vector3.forward, m_Camera.transform.rotation * Vector3.up);
+		base.transform.rotation = Quaternion.Euler(Camera.current.transform.rotation.eulerAngles.x, m_Camera.transform.rotation.eulerAngles.y, 0f);
 	}
 }
