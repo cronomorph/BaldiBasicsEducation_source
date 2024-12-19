@@ -16,7 +16,7 @@ public class BsodaSparyScript : MonoBehaviour
 		lifeSpan = 30f;
 	}
 
-	private void Update()
+	private void FixedUpdate() // So it updates based off the physics engine
 	{
 		rb.velocity = base.transform.forward * speed;
 		lifeSpan -= Time.deltaTime;
