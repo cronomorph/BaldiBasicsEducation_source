@@ -166,10 +166,7 @@ public class BaldiScript : MonoBehaviour
 	public void GetAngry(float value)
 	{
 		baldiAnger += value;
-		if (baldiAnger < 0.5f)
-		{
-			baldiAnger = 0.5f;
-		}
+  		baldiAnger = Mathf.Clamp(baldiAnger, 0, 0.5f);
 		baldiWait = -3f * baldiAnger / (baldiAnger + 2f / baldiSpeedScale) + 3f;
 	}
 
