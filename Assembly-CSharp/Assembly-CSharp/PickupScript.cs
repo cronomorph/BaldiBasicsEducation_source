@@ -4,66 +4,53 @@ using UnityEngine;
 public class PickupScript : MonoBehaviour
 {
 	public GameControllerScript gc;
-
 	public Transform player;
-
-	private void Start()
-	{
-	}
-
+ 
 	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit raycastHit;
-			if (Physics.Raycast(ray, out raycastHit))
-			{
-				if (raycastHit.transform.name == "Pickup_EnergyFlavoredZestyBar" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(1);
-				}
-				else if (raycastHit.transform.name == "Pickup_YellowDoorLock" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(2);
-				}
-				else if (raycastHit.transform.name == "Pickup_Key" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
+			if (Vector3.Distance(player.position, base.transform.position) < 10f) {
+    				switch (raycastHit.transform.name.ToString()) {
+	 				case "Pickup_EnergyFlavoredZestyBar":
+       					raycastHit.transform.gameObject.SetActive(false);
+       					gc.CollectItem(1);
+       					break;
+	     				case "Pickup_EnergyFlavoredZestyBar":
+	   				raycastHit.transform.gameObject.SetActive(false);
+	   				gc.CollectItem(2);
+	   				break;
+	 				case "Pickup_Key":
+       					raycastHit.transform.gameObject.SetActive(false);
 					gc.CollectItem(3);
-				}
-				else if (raycastHit.transform.name == "Pickup_BSODA" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
+       					break;
+	     				case "Pickup_BSODA":
 					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(4);
-				}
-				else if (raycastHit.transform.name == "Pickup_Quarter" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(5);
-				}
-				else if (raycastHit.transform.name == "Pickup_Tape" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(6);
-				}
-				else if (raycastHit.transform.name == "Pickup_AlarmClock" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(7);
-				}
-				else if (raycastHit.transform.name == "Pickup_WD-3D" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(8);
-				}
-				else if (raycastHit.transform.name == "Pickup_SafetyScissors" & Vector3.Distance(player.position, base.transform.position) < 10f)
-				{
-					raycastHit.transform.gameObject.SetActive(false);
-					gc.CollectItem(9);
-				}
+ 					gc.CollectItem(4);
+	   				break;
+	 				case "Pickup_Quarter":
+       					raycastHit.transform.gameObject.SetActive(false);
+	     				gc.CollectItem(5);
+       					break;
+     					case "Pickup_Tape":
+	   				raycastHit.transform.gameObject.SetActive(false);
+	 				gc.CollectItem(6);
+	   				break;
+	 				case "Pickup_AlarmClock":
+       					raycastHit.transform.gameObject.SetActive(false);
+     					gc.CollectItem(7);
+       					break;
+	     				case "Pickup_WD-3D":
+	   				raycastHit.transform.gameObject.SetActive(false);
+	 				gc.CollectItem(8);
+	  				break;
+	 				case "Pickup_SafetyScissors":
+       					raycastHit.transform.gameObject.SetActive(false);
+     					gc.CollectItem(9);
+       					break;
+	 			}
 			}
 		}
 	}
