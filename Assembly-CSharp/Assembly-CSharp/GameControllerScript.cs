@@ -184,18 +184,16 @@ public class GameControllerScript : MonoBehaviour
 					UnpauseGame();
 				}
 			}
-			if (Input.GetKeyDown(KeyCode.Y) & gamePaused)
-			{
-				SceneManager.LoadScene("MainMenu");
-			}
-			else if (Input.GetKeyDown(KeyCode.N) & gamePaused)
-			{
-				UnpauseGame();
-			}
-			if (!gamePaused & Time.timeScale != 1f)
-			{
-				Time.timeScale = 1f;
-			}
+   			if (gamePaused) {
+      				if (Input.GetKeyDown(KeyCode.Y)) {
+	  				SceneManager.LoadScene("MainMenu");
+      				}
+	  			if (Input.GetKeyDown(KeyCode.N)) {
+      					UnpauseGame();
+      				}
+      	
+      			}
+  			Time.timescale = Mathf.Clamp(Time.timescale, 0f, 1f);
 			if (Input.GetMouseButtonDown(1))
 			{
 				UseItem();
@@ -224,17 +222,15 @@ public class GameControllerScript : MonoBehaviour
 				UpdateItemSelection();
 			}
 		}
-		else if (Time.timeScale != 0f)
-		{
-			Time.timeScale = 0f;
-		}
 		if (player.stamina < 0f & !warning.activeSelf)
 		{
 			warning.SetActive(true);
 		}
-		else if (player.stamina > 0f & warning.activeSelf)
-		{
-			warning.SetActive(false);
+  		if (player.stamina < 0f) {
+    			warning.SetActive(true);
+    		}
+      		else {
+			warning.SetActive(false;)
 		}
 		if (player.gameOver)
 		{
@@ -277,14 +273,14 @@ public class GameControllerScript : MonoBehaviour
 		if (mode == "story")
 		{
 			notebookCount.text = notebooks.ToString() + "/7 Notebooks";
+   			if (notebooks == 7) {
+      				ActivateFinalMode();
+	  			audioDevice.PlayOneShot(aud_AllNotebooks, 0.8f);
+      			}
 		}
 		else
 		{
 			notebookCount.text = notebooks.ToString() + " Notebooks";
-		}
-		if (notebooks == 7 & mode == "story")
-		{
-			ActivateFinaleMode();
 		}
 	}
 
@@ -297,12 +293,9 @@ public class GameControllerScript : MonoBehaviour
 
 	public void LockMouse()
 	{
-		if (!learningActive)
-		{
-			cursorController.LockCursor();
-			mouseLocked = true;
-			reticle.SetActive(true);
-		}
+		cursorController.LockCursor();
+		mouseLocked = true;
+		reticle.SetActive(true);
 	}
 
 	public void UnlockMouse()
@@ -399,19 +392,12 @@ public class GameControllerScript : MonoBehaviour
 			quarter.SetActive(true);
 			tutorBaldi.PlayOneShot(aud_Prize);
 		}
-		else if (notebooks == 7 & mode == "story")
-		{
-			audioDevice.PlayOneShot(aud_AllNotebooks, 0.8f);
-		}
 	}
 
 	private void IncreaseItemSelection()
 	{
 		itemSelected++;
-		if (itemSelected > 2)
-		{
-			itemSelected = 0;
-		}
+  		itemSelected = Mathf.Clamp(itemSelected, 0, 2);
 		itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
 		UpdateItemName();
 	}
@@ -419,10 +405,7 @@ public class GameControllerScript : MonoBehaviour
 	private void DecreaseItemSelection()
 	{
 		itemSelected--;
-		if (itemSelected < 0)
-		{
-			itemSelected = 2;
-		}
+  		itemSelected = Mathf.Clamp(itemSelected, 0, 2);
 		itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
 		UpdateItemName();
 	}
