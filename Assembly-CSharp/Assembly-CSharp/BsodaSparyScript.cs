@@ -19,7 +19,7 @@ public class BsodaSparyScript : MonoBehaviour
 	private void FixedUpdate() // So it updates based off the physics engine
 	{
 		lifeSpan -= Time.deltaTime;
-		if (lifeSpan = 0f)
+		if (lifeSpan <= 0f)
 		{
 			Destroy(gameObject);
 		}
