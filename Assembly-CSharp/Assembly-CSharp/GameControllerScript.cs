@@ -5,81 +5,43 @@ using UnityEngine.UI;
 public class GameControllerScript : MonoBehaviour
 {
 	public CursorControllerScript cursorController;
-
 	public PlayerScript player;
-
 	public Transform playerTransform;
-
 	public Transform cameraTransform;
-
 	public EntranceScript entrance_0;
-
 	public EntranceScript entrance_1;
-
 	public EntranceScript entrance_2;
-
 	public EntranceScript entrance_3;
-
 	public GameObject baldiTutor;
-
 	public GameObject baldi;
-
 	public BaldiScript baldiScrpt;
-
 	public AudioClip aud_Prize;
-
 	public AudioClip aud_AllNotebooks;
-
 	public GameObject principal;
-
 	public GameObject crafters;
-
 	public GameObject playtime;
-
 	public PlaytimeScript playtimeScript;
-
 	public GameObject gottaSweep;
-
 	public GameObject bully;
-
  	private Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-  
 	private RaycastHit raycastHit;
-
 	public GameObject firstPrize;
-
 	public FirstPrizeScript firstPrizeScript;
-
 	public GameObject quarter;
-
 	public AudioSource tutorBaldi;
-
 	public string mode;
-
 	public int notebooks;
-
 	public GameObject[] notebookPickups;
-
 	public int failedNotebooks;
-
 	public float time;
-
 	public bool spoopMode;
-
 	public bool finaleMode;
-
 	public bool debugMode;
-
 	public bool mouseLocked;
-
 	public int exitsReached;
-
 	public int itemSelected = Mathf.Clamp(itemSelected, 0, 2);;
-
 	public int[] item = new int[3];
-
 	public RawImage[] itemSlot = new RawImage[3];
-
 	private string[] itemNames = new string[10]
 	{
 		"Nothing",
@@ -93,70 +55,41 @@ public class GameControllerScript : MonoBehaviour
 		"WD-NoSquee (Door Type)",
 		"Safety Scissors"
 	};
-
 	public Text itemText;
-
 	public Object[] items = new Object[10];
-
 	public Texture[] itemTextures = new Texture[10];
-
 	public GameObject bsodaSpray;
-
 	public GameObject alarmClock;
-
 	public Text notebookCount;
-
 	public GameObject pauseText;
-
 	public GameObject highScoreText;
-
 	public GameObject baldiNod;
-
 	public GameObject baldiShake;
-
 	public GameObject warning;
-
 	public GameObject reticle;
-
 	public RectTransform itemSelect;
-
 	private int[] itemSelectOffset = new int[3]
 	{
 		-80,
 		-40,
 		0
 	};
-
 	private bool gamePaused;
-
 	private bool learningActive;
-
 	private float gameOverDelay;
-
 	private AudioSource audioDevice;
-
 	public AudioClip aud_Soda;
-
 	public AudioClip aud_Spray;
-
 	public AudioClip aud_buzz;
-
 	public AudioClip aud_Hang;
-
 	public AudioClip aud_MachineQuiet;
-
 	public AudioClip aud_MachineStart;
-
 	public AudioClip aud_MachineRev;
-
 	public AudioClip aud_MachineLoop;
-
 	public AudioClip aud_Switch;
-
 	public AudioSource schoolMusic;
-
 	public AudioSource learnMusic;
-
+ 
 	private void Start()
 	{
 		audioDevice = base.GetComponent<AudioSource>();
@@ -493,7 +426,7 @@ public class GameControllerScript : MonoBehaviour
     				break;
 				case 8:
     				if (Physics.Raycast(ray, out raycastHit)) {
-					if (raycastHitc.collider.tag == "Door") {
+					if (raycastHit.collider.tag == "Door") {
      						if (Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f) {
 	   						raycastHit.collider.gameObject.GetComponent<DoorScript>.SilenceDoor();
 	  						ResetItem();
