@@ -42,8 +42,9 @@ public class GameControllerScript : MonoBehaviour
 
 	public GameObject bully;
 
- 	Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-	RaycastHit raycastHit;
+ 	private Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+  
+	private RaycastHit raycastHit;
 
 	public GameObject firstPrize;
 
@@ -543,28 +544,27 @@ public class GameControllerScript : MonoBehaviour
 	public void ExitReached()
 	{
 		exitsReached++;
-		if (exitsReached == 1)
-		{
-			RenderSettings.ambientLight = Color.red;
+  		switch (exitsReached) {
+    			case 1:
+       			RenderSettings.ambientLight = Color.red;
 			RenderSettings.fog = true;
 			audioDevice.PlayOneShot(aud_Switch, 0.8f);
 			audioDevice.clip = aud_MachineQuiet;
 			audioDevice.loop = true;
 			audioDevice.Play();
-		}
-		if (exitsReached == 2)
-		{
-			audioDevice.volume = 0.8f;
+   			break;
+      			case 2:
+	 		audioDevice.volume = 0.8f;
 			audioDevice.clip = aud_MachineStart;
 			audioDevice.loop = true;
 			audioDevice.Play();
-		}
-		if (exitsReached == 3)
-		{
-			audioDevice.clip = aud_MachineRev;
-			audioDevice.loop = false;
-			audioDevice.Play();
-		}
+	 		break;
+    			case 3:
+       			audioDevice.clip = aud_MachineRev;
+	  		audioDevice.loop = false;
+     			audioDevice.Play();
+       			break;
+    		}
 	}
 
 	public void DespawnCrafters()
