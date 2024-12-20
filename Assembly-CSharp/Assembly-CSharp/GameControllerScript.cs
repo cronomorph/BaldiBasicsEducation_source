@@ -99,7 +99,7 @@ public class GameControllerScript : MonoBehaviour
 			baldiScrpt.endless = true;
 		}
 		schoolMusic.Play();
-		LockMouse();
+		cursorController.LockMouse();
 		UpdateNotebookCount();
 		itemSelected = 0;
 		gameOverDelay = 0.5f;
@@ -230,20 +230,6 @@ public class GameControllerScript : MonoBehaviour
 		time = 0f;
 	}
 
-	public void LockMouse()
-	{
-		cursorController.LockCursor();
-		mouseLocked = true;
-		reticle.SetActive(true);
-	}
-
-	public void UnlockMouse()
-	{
-		cursorController.UnlockCursor();
-		mouseLocked = false;
-		reticle.SetActive(false);
-	}
-
 	private void PauseGame()
 	{
 		Time.timeScale = 0f;
@@ -303,7 +289,7 @@ public class GameControllerScript : MonoBehaviour
 	public void ActivateLearningGame()
 	{
 		learningActive = true;
-		UnlockMouse();
+		cursorController.UnlockMouse();
 		tutorBaldi.Stop();
 		if (!spoopMode)
 		{
@@ -316,7 +302,7 @@ public class GameControllerScript : MonoBehaviour
 	{
 		learningActive = false;
 		Object.Destroy(subject);
-		LockMouse();
+		cursorController.LockMouse();
 		if (player.stamina != 100f) {
   			player.stamina = 100f;
   		}
