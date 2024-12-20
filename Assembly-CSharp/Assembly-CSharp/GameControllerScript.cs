@@ -43,6 +43,9 @@ public class GameControllerScript : MonoBehaviour
 
 	public GameObject bully;
 
+ 	Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	RaycastHit raycastHit;
+
 	public GameObject firstPrize;
 
 	public FirstPrizeScript firstPrizeScript;
@@ -71,7 +74,7 @@ public class GameControllerScript : MonoBehaviour
 
 	public int exitsReached;
 
-	public int itemSelected;
+	public int itemSelected = Mathf.Clamp(itemSelected, 0, 2);;
 
 	public int[] item = new int[3];
 
@@ -193,18 +196,25 @@ public class GameControllerScript : MonoBehaviour
       				}
       	
       			}
-  			Time.timescale = Mathf.Clamp(Time.timescale, 0f, 1f);
+  			else if (Time.timeScale != 0f)
+			{
+				Time.timeScale = 0f;
+			}
 			if (Input.GetMouseButtonDown(1))
 			{
 				UseItem();
 			}
 			if (Input.GetAxis("Mouse ScrollWheel") > 0f)
 			{
-				DecreaseItemSelection();
+				itemSelected--;
+				itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
+				UpdateItemName();
 			}
 			else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
 			{
-				IncreaseItemSelection();
+				itemSelected++;
+				itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
+				UpdateItemName();
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha1))
 			{
@@ -221,10 +231,6 @@ public class GameControllerScript : MonoBehaviour
 				itemSelected = 2;
 				UpdateItemSelection();
 			}
-		}
-		if (player.stamina < 0f & !warning.activeSelf)
-		{
-			warning.SetActive(true);
 		}
   		if (player.stamina < 0f) {
     			warning.SetActive(true);
@@ -378,36 +384,17 @@ public class GameControllerScript : MonoBehaviour
 		learningActive = false;
 		Object.Destroy(subject);
 		LockMouse();
-		if (player.stamina < 100f)
-		{
-			player.stamina = 100f;
-		}
-		if (!spoopMode)
-		{
+		if (player.stamina != 100f) {
+  			player.stamina = 100f;
+  		}
+  		if (!spoopMode) {
 			schoolMusic.Play();
 			learnMusic.Stop();
-		}
-		if (notebooks == 1 & !spoopMode)
-		{
-			quarter.SetActive(true);
-			tutorBaldi.PlayOneShot(aud_Prize);
-		}
-	}
-
-	private void IncreaseItemSelection()
-	{
-		itemSelected++;
-  		itemSelected = Mathf.Clamp(itemSelected, 0, 2);
-		itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
-		UpdateItemName();
-	}
-
-	private void DecreaseItemSelection()
-	{
-		itemSelected--;
-  		itemSelected = Mathf.Clamp(itemSelected, 0, 2);
-		itemSelect.anchoredPosition = new Vector3((float)itemSelectOffset[itemSelected], 0f, 0f);
-		UpdateItemName();
+   			if (notebooks == 1) {
+      				quarter.SetActive(true);
+	  			tutorBaldi.PlayOneShot(aud_Prize);
+      			}
+    		}
 	}
 
 	private void UpdateItemSelection()
@@ -445,105 +432,93 @@ public class GameControllerScript : MonoBehaviour
 	{
 		if (item[itemSelected] != 0)
 		{
-			if (item[itemSelected] == 1)
-			{
-				player.stamina = player.maxStamina * 2f;
-				ResetItem();
-			}
-			else if (item[itemSelected] == 2)
-			{
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit;
-				if (Physics.Raycast(ray, out raycastHit) && (raycastHit.collider.tag == "SwingingDoor" & Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f))
-				{
-					raycastHit.collider.gameObject.GetComponent<SwingingDoorScript>().LockDoor(15f);
-					ResetItem();
+			switch (item[itemSelected]) {
+				case 1:
+    				player.stamina = player.maxStamina * 2f;
+    				break;
+
+ 				case 2:
+     				if (Physics.Raycast(ray, out raycastHit) && (raycastHit.collider.tag == "SwingingDoor" & Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f))	{
+	 				raycastHit.collider.gameObject.GetComponent<SwingingDoorScript>.LockDoor(15f);
+      					ResetItem();
 				}
-			}
-			else if (item[itemSelected] == 3)
-			{
-				Ray ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit2;
-				if (Physics.Raycast(ray2, out raycastHit2) && (raycastHit2.collider.tag == "Door" & Vector3.Distance(playerTransform.position, raycastHit2.transform.position) <= 10f))
-				{
-					raycastHit2.collider.gameObject.GetComponent<DoorScript>().UnlockDoor();
-					raycastHit2.collider.gameObject.GetComponent<DoorScript>().OpenDoor();
-					ResetItem();
-				}
-			}
-			else if (item[itemSelected] == 4)
-			{
-				Object.Instantiate(bsodaSpray, playerTransform.position, cameraTransform.rotation);
-				ResetItem();
-				player.ResetGuilt("drink", 1f);
-				audioDevice.PlayOneShot(aud_Soda);
-			}
-			else if (item[itemSelected] == 5)
-			{
-				Ray ray3 = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit3;
-				if (Physics.Raycast(ray3, out raycastHit3))
-				{
-					if (raycastHit3.collider.name == "BSODAMachine" & Vector3.Distance(playerTransform.position, raycastHit3.transform.position) <= 10f)
-					{
-						ResetItem();
-						CollectItem(4);
-					}
-					else if (raycastHit3.collider.name == "ZestyMachine" & Vector3.Distance(playerTransform.position, raycastHit3.transform.position) <= 10f)
-					{
-						ResetItem();
-						CollectItem(1);
-					}
-					else if (raycastHit3.collider.name == "PayPhone" & Vector3.Distance(playerTransform.position, raycastHit3.transform.position) <= 10f)
-					{
-						raycastHit3.collider.gameObject.GetComponent<TapePlayerScript>().Play();
-						ResetItem();
-					}
-				}
-			}
-			else if (item[itemSelected] == 6)
-			{
-				Ray ray4 = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit4;
-				if (Physics.Raycast(ray4, out raycastHit4) && (raycastHit4.collider.name == "TapePlayer" & Vector3.Distance(playerTransform.position, raycastHit4.transform.position) <= 10f))
-				{
-					raycastHit4.collider.gameObject.GetComponent<TapePlayerScript>().Play();
-					ResetItem();
-				}
-			}
-			else if (item[itemSelected] == 7)
-			{
-				GameObject gameObject = Object.Instantiate(alarmClock, playerTransform.position, cameraTransform.rotation);
+     				break;
+
+  				case 3:
+      				if (Physics.Raycast(ray, out raycastHit2) && (raycastHit.collider.tag == "Door" & Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f)) {
+	  				raycastHit.collider.gameObject.GetComponent<DoorScript>().UnlockDoor();
+       					raycastHit.collider.gameObject.GetComponent<DoorScript>().OpenDoor();
+	    				ResetItem();
+	  			}
+      				break;
+	  			case 4:
+      				Object.Instantiate(bsodaSpray, playerTransform.position, cameraTransform.rotation);
+	  			ResetItem();
+      				player.ResetGuilt("drink", 1f);
+	  			audioDevice.PlayOneShot(aud_Soda);
+      				break;
+	  			case 5:
+      				if (Physics.Raycast(ray, out raycastHit)) {
+	  				if (Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f) {
+						switch (raycastHit.collider.name) {
+							case "BSODAMachine":
+       							ResetItem();
+	      						CollectItem(4);
+      							break;
+	     						case "ZestyMachine":
+	    						ResetItem();
+	   						CollectItem(1);
+	    						break;
+	   						case "PayPhone":
+	  						ResetItem();
+	  						raycastHit.collider.gameObject.GetComponent<TapePlayerScript>().Play();
+	  						break;
+     						}
+	  				}
+   				}
+      				break;
+				case 6:
+    				if (Physics.Raycast(ray, out raycastHit) {
+					if (raycastHit.collider.name "TapePlayer") {
+     						if (Vector3.Distance(playeTransform.position, raycastHit.transform.position) <= 10f) {
+	   						raycastHit.collider.gameObject.GetComponent<TapePlayerScript>().Play();
+	  						ResetItem();
+	   					}
+     					}
+ 				}
+    				break;
+				case 7:
+    				GameObject gameobject = Object.Instantiate(alarmClock, playerTransform.position, cameraTransform.position);
 				gameObject.GetComponent<AlarmClockScript>().baldi = baldiScrpt;
-				ResetItem();
-			}
-			else if (item[itemSelected] == 8)
-			{
-				Ray ray5 = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit5;
-				if (Physics.Raycast(ray5, out raycastHit5) && (raycastHit5.collider.tag == "Door" & Vector3.Distance(playerTransform.position, raycastHit5.transform.position) <= 10f))
-				{
-					raycastHit5.collider.gameObject.GetComponent<DoorScript>().SilenceDoor();
-					ResetItem();
-					audioDevice.PlayOneShot(aud_Spray);
+    				break;
+				case 8:
+    				if (Physics.Raycast(ray, out raycastHit)) {
+					if (raycastHitc.collider.tag == "Door") {
+     						if (Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f) {
+	   						raycastHit.collider.gameObject.GetComponent<DoorScript>.SilenceDoor();
+	  						ResetItem();
+	 						audioDevice.PlayOneShot(aud_Spray);
+	   					}
+     					}
 				}
-			}
-			else if (item[itemSelected] == 9)
-			{
-				Ray ray6 = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit raycastHit6;
-				if (player.jumpRope)
-				{
+    				break;
+				case 9:
+    				if (player.jumpRope) {
 					player.DeactivateJumpRope();
-					playtimeScript.Disappoint();
+    					playtimeScript.Disappoint();
 					ResetItem();
 				}
-				else if (Physics.Raycast(ray6, out raycastHit6) && raycastHit6.collider.name == "1st Prize")
-				{
-					firstPrizeScript.GoCrazy();
-					ResetItem();
+    				if (Physics.Raycast(ray, out raycastHit)) {
+					if (Vector3.Distance(playerTransform.position, raycastHit.transform.position) <= 10f) {
+						if (raycastHit.collider.name == "1st Prize") {
+      							firstPrizeScript.GoCrazy();
+	     						ResetItem();
+      						}
+     					}
 				}
-			}
+    				break;
+   			}
+  
 		}
 	}
 
