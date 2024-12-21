@@ -12,7 +12,7 @@ public class BaldiScript : MonoBehaviour
 
 	public float timeToMove;
 
-	public float baldiAnger;
+	public float baldiAnger = Mathf.Clamp(baldiAnger, 0, 0.5f);
 
 	public float baldiTempAnger;
 
@@ -166,7 +166,6 @@ public class BaldiScript : MonoBehaviour
 	public void GetAngry(float value)
 	{
 		baldiAnger += value;
-  		baldiAnger = Mathf.Clamp(baldiAnger, 0, 0.5f);
 		baldiWait = -3f * baldiAnger / (baldiAnger + 2f / baldiSpeedScale) + 3f;
 	}
 
