@@ -13,15 +13,12 @@ public class BsodaSparyScript : MonoBehaviour
 	{
 		rb = base.GetComponent<Rigidbody>();
 		rb.velocity = base.transform.forward * speed;
-		lifeSpan = 30f;
+		StartCoroutine(whatthisdoes(30));
 	}
 
-	private void FixedUpdate() // So it updates based off the physics engine
-	{
-		lifeSpan -= Time.deltaTime;
-		if (lifeSpan <= 0f)
-		{
-			Destroy(gameObject);
-		}
-	}
+ 	private IEnumerator whatthisdoes(int lifeSpan) {
+  		yield return new WaitForSeconds(lifeSpan);
+    		destroy(gameObject);
+      		yield return;
+  	}
 }
