@@ -12,7 +12,7 @@ public class PickupScript : MonoBehaviour
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit raycastHit;
-			if (Vector3.Distance(player.position, base.transform.position) < 10f) {
+			if (Vector3.Distance(player.position, raycastHit.transform.position) < 10f) {
     				switch (raycastHit.transform.name.ToString()) {
 	 				case "Pickup_EnergyFlavoredZestyBar":
        					raycastHit.transform.gameObject.SetActive(false);
